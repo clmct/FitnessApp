@@ -8,14 +8,14 @@
             "name": "fitness_app",
             "request": "launch",
             "type": "dart",
-            "program": "lib/PresentationLayer/main.dart"
+            "program": "lib/sources/presentation_layer/main.dart"
         },
         {
             "name": "fitness_app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "program": "lib/PresentationLayer/main.dart"
+            "program": "lib/sources/presentation_layer/main.dart"
         }
     ]
 }
