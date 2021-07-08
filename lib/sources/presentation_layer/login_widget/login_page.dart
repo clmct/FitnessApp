@@ -1,11 +1,7 @@
 import 'package:fitness_app/sources/presentation_layer/login_widget/login_page_state.dart';
 import 'package:fitness_app/sources/presentation_layer/news_widget/news_page.dart';
-import 'package:fitness_app/sources/service_layer/news.dart';
-import 'package:fitness_app/sources/service_layer/result.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness_app/sources/service_layer/network_service.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:http/http.dart';
 
 class LoginPageWidget extends StatelessWidget {
   @override
@@ -43,12 +39,7 @@ class LoginPageWidget extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/news': (context) => NewsPageWidget(
-            // items: List<ListItem>.generate(
-            //   100,
-            //   (i) => i % 6 == 0 ? MessageItem('1 $i') : MessageItem('2 $i'),
-            // ),
-            ),
+        '/news': (context) => NewsPageWidget(),
       },
     );
   }

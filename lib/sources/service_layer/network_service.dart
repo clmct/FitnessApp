@@ -26,14 +26,14 @@ class NetworkService {
   Future<Result> postToken() async {
     final EndPointFabric endPointFabric = EndPointFabric();
 
-    // await DotEnv().load('token.env');
-    // DotEnv().env['BEARER'];
+    // await DotEnv().load('.env');
+    var token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImlhdCI6MTYyMDQ5MTYxNCwiZXhwIjoxMDAxNjIwNDkxNjE0fQ.zGqmT0dH2bUMkG5DltUciML5CCXDbXsdO3p5a6AH5Z8";
 
     final response = await http.post(
       Uri.parse(endPointFabric.getTokenURL()),
       headers: {
-        HttpHeaders.authorizationHeader:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImlhdCI6MTYyMDQ5MTYxNCwiZXhwIjoxMDAxNjIwNDkxNjE0fQ.zGqmT0dH2bUMkG5DltUciML5CCXDbXsdO3p5a6AH5Z8',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
 

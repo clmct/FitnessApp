@@ -56,7 +56,8 @@ class _PostState extends State<PostWidget> {
           SizedBox(height: 13),
           Row(children: [
             SizedBox(width: 14),
-            Text(caption),
+            Flexible(child: Text(caption)),
+            SizedBox(width: 14)
           ]),
           SizedBox(height: 14),
           Row(children: [
