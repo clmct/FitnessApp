@@ -11,11 +11,15 @@ abstract class _LoginStore with Store {
   @observable
   String password = "";
 
+  @observable
+  bool isValidUsername = true;
+
+  @observable
+  bool isValidPassword = true;
+
   @computed
   bool get isValidForm {
-    if (password.length >= 3 &&
-        password.length <= 9 &&
-        _isValidUsername(username) == true) {
+    if (isValidUsername == true && isValidPassword == true) {
       return true;
     } else {
       return false;
@@ -26,28 +30,47 @@ abstract class _LoginStore with Store {
   @action
   void setUsername(String value) {
     username = value;
+    _validUsername();
   }
 
   @action
   void setPassword(String value) {
     password = value;
+    _validPassword();
   }
 
-  // Private Methods
-  bool _isValidUsername(String string) {
+  @action
+  void login() {
+    _validPassword();
+    _validUsername();
+  }
+
+  void _validPassword() {
+    if (password.length >= 3 && password.length <= 9) {
+      isValidPassword = true;
+    } else {
+      isValidPassword = false;
+    }
+  }
+
+  void _validUsername() {
     const allowedCharacters =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
     Set<String> restricted = Set();
-    final split = string.split('');
+    if (username.isEmpty) {
+      isValidUsername = false;
+      return;
+    }
+    final split = username.split('');
     split.forEach((c) {
       if (!allowedCharacters.contains(c)) {
         restricted.add(c);
       }
     });
     if (restricted.isEmpty) {
-      return true;
+      isValidUsername = true;
     } else {
-      return false;
+      isValidUsername = false;
     }
   }
 }

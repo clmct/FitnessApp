@@ -7,7 +7,11 @@ class News {
 
   factory News.fromJson(Map<String, dynamic> json) {
     return News(
-      posts: json['result']['posts'],
+      posts: List<Post>.from(
+        json["result"]["posts"].map(
+          (x) => Post.fromJson(x),
+        ),
+      ),
     );
   }
 }
@@ -23,8 +27,8 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      userName: json['result']['posts']['user']['username'],
-      caption: json['result']['posts']['caption'],
+      userName: json['user']['username'],
+      caption: json['caption'],
     );
   }
 }

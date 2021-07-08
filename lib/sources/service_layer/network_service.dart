@@ -26,7 +26,7 @@ class NetworkService {
   Future<Result> postToken() async {
     final EndPointFabric endPointFabric = EndPointFabric();
 
-    // await DotEnv().load('.env');
+    // await DotEnv().load('token.env');
     // DotEnv().env['BEARER'];
 
     final response = await http.post(

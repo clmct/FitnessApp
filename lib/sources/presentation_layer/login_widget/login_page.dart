@@ -4,6 +4,7 @@ import 'package:fitness_app/sources/service_layer/news.dart';
 import 'package:fitness_app/sources/service_layer/result.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_app/sources/service_layer/network_service.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
 
 class LoginPageWidget extends StatelessWidget {
@@ -43,10 +44,10 @@ class LoginPageWidget extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/news': (context) => NewsPageWidget(
-              items: List<ListItem>.generate(
-                100,
-                (i) => i % 6 == 0 ? MessageItem('1 $i') : MessageItem('2 $i'),
-              ),
+            // items: List<ListItem>.generate(
+            //   100,
+            //   (i) => i % 6 == 0 ? MessageItem('1 $i') : MessageItem('2 $i'),
+            // ),
             ),
       },
     );
@@ -67,126 +68,123 @@ class MyCustomFormState extends State<LoginWidget> {
   bool _isObscure = true;
 
   final LoginStore store = LoginStore();
-  final NetworkService networkService = NetworkService();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
       child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40.0),
-              bottomRight: Radius.circular(40.0),
+        child: Observer(
+          builder: (_) => Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40.0),
+                bottomRight: Radius.circular(40.0),
+              ),
             ),
-          ),
-          margin: EdgeInsets.only(left: 15, right: 15),
-          height: 400,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 30),
-                child: TextFormField(
-                  onChanged: (value) {
-                    store.setUsername(value);
-                  },
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'NickName',
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 30),
-                child: TextFormField(
-                  onChanged: (value) {
-                    store.setPassword(value);
-                  },
-                  obscureText: _isObscure,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                          _isObscure ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 45),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                        Color.fromRGBO(213, 78, 78, 1),
-                        Color.fromRGBO(175, 85, 117, 1),
-                      ],
-                    ),
-                  ),
-                  width: double.infinity,
-                  height: 53,
-                  child: MaterialButton(
-                    disabledColor: Colors.black12,
-                    disabledElevation: 1,
-                    disabledTextColor: Colors.blueGrey,
-                    onPressed: () {
-                      if (store.isValidForm) {
-                        // Navigator.pushNamed(context, '/news'),
-                        Future<Result> access = networkService.postToken();
-                        access.then((value) {
-                          print(value.access);
-                          Future<News> news =
-                              networkService.getNews(value.access);
-                          news.then(
-                            (value) {
-                              // print(value.posts[1].caption);
-                            },
-                          );
-                        });
-                        //print(access.access);
-                      }
+            margin: EdgeInsets.only(left: 15, right: 15),
+            height: 450,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 30),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      store.setUsername(value);
                     },
-                    child: Text('Sign in'),
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'NickName',
+                      errorText: store.isValidUsername
+                          ? null
+                          : 'NickName can\'t be empty or invalid',
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 40),
-                child: Text("Регистрируясь вы принимаете наши условия:"),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 5),
-                child: Text(
-                  "политику использования данных",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 30),
+                  child: TextFormField(
+                    onChanged: (value) {
+                      store.setPassword(value);
+                    },
+                    obscureText: _isObscure,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Password',
+                      errorText: store.isValidPassword
+                          ? null
+                          : 'Password must be between 3 and 9 characters',
+                      suffixIcon: IconButton(
+                        icon: Icon(_isObscure
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 5),
-                child: Text(
-                  "политику в отношении файлов cookie",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 45),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(3)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Color.fromRGBO(213, 78, 78, 1),
+                          Color.fromRGBO(175, 85, 117, 1),
+                        ],
+                      ),
+                    ),
+                    width: double.infinity,
+                    height: 53,
+                    child: MaterialButton(
+                      disabledColor: Colors.black12,
+                      disabledElevation: 1,
+                      disabledTextColor: Colors.blueGrey,
+                      onPressed: () {
+                        store.login();
+                        if (store.isValidForm == true) {
+                          Navigator.pushNamed(context, '/news');
+                        }
+                      },
+                      child: Text('Sign in'),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 40),
+                  child: Text("Регистрируясь вы принимаете наши условия:"),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 5),
+                  child: Text(
+                    "политику использования данных",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 5),
+                  child: Text(
+                    "политику в отношении файлов cookie",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

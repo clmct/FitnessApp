@@ -47,6 +47,36 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  final _$isValidUsernameAtom = Atom(name: '_LoginStore.isValidUsername');
+
+  @override
+  bool get isValidUsername {
+    _$isValidUsernameAtom.reportRead();
+    return super.isValidUsername;
+  }
+
+  @override
+  set isValidUsername(bool value) {
+    _$isValidUsernameAtom.reportWrite(value, super.isValidUsername, () {
+      super.isValidUsername = value;
+    });
+  }
+
+  final _$isValidPasswordAtom = Atom(name: '_LoginStore.isValidPassword');
+
+  @override
+  bool get isValidPassword {
+    _$isValidPasswordAtom.reportRead();
+    return super.isValidPassword;
+  }
+
+  @override
+  set isValidPassword(bool value) {
+    _$isValidPasswordAtom.reportWrite(value, super.isValidPassword, () {
+      super.isValidPassword = value;
+    });
+  }
+
   final _$_LoginStoreActionController = ActionController(name: '_LoginStore');
 
   @override
@@ -76,6 +106,8 @@ mixin _$LoginStore on _LoginStore, Store {
     return '''
 username: ${username},
 password: ${password},
+isValidUsername: ${isValidUsername},
+isValidPassword: ${isValidPassword},
 isValidForm: ${isValidForm}
     ''';
   }
